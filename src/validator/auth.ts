@@ -15,14 +15,6 @@ export const signupValidator = [
     .bail()
     .isEmail()
     .withMessage("Email is invalid"),
-  body("username")
-    .exists({ checkFalsy: true })
-    .withMessage("Username is required")
-    .bail()
-    .isString()
-    .withMessage("Username must be a string")
-    .isLength({ min: 6 })
-    .withMessage("Username must be at least 6 characters long"),
   body("password")
     .exists({ checkFalsy: true })
     .withMessage("Password is required")
@@ -36,18 +28,13 @@ export const signupValidator = [
     .isString()
     .withMessage("Profile picture is invalid"),
   body("gender")
-    .optional()
-    .isIn(["Male", "Female", "Other"])
+    .exists({ checkFalsy: true })
+    .isIn(["Male", "Female"])
     .withMessage("Gender is invalid"),
-  body("dateofbirth").optional().isDate().withMessage("Provide correct date"),
-  body("phone")
-    .optional()
-    .isMobilePhone("id-ID")
-    .withMessage("Povide id phone number"),
 ];
 
 export const signinValidator = [
-  body("user").isString().withMessage("Username/Email is invalid!").bail(),
+  body("email").isEmail().withMessage("Email is invalid!").bail(),
   body("password")
     .exists({ checkFalsy: true })
     .withMessage("Password required")

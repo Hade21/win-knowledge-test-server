@@ -10,32 +10,29 @@ export const signup = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  const {
-    fullname,
-    email,
-    username,
-    profilePicture,
-    gender,
-    dateofbirth,
-    phone,
-  } = req.body;
+  const { fullname, email, profilePicture, gender } = req.body;
   const password = await bcrypt.hash(req.body.password, 12);
 
   const newUser = new userModel({
     fullname,
     email,
-    username,
     password,
     profilePicture,
     gender,
-    dateofbirth,
-    phone,
   });
 
   try {
-    const savedUser = await newUser.save();
-    const user = { username: savedUser.username, password: savedUser.password };
-    return res.status(201).json({ message: "success", user });
+    const exist = await userModel.findOne({ email });
+    if (!exist) {
+      const savedUser = await newUser.save();
+      const user = {
+        email: savedUser.email,
+        password: savedUser.password,
+      };
+      return res.status(201).json({ message: "success", user });
+    } else {
+      return res.status(422).json({ message: "Email has been taken!" });
+    }
   } catch (error) {
     return res.status(500).json({ error });
   }
@@ -46,39 +43,23 @@ export const signin = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  const { user, password } = req.body;
-  const username = await userModel.findOne({ username: user }).lean();
-  const email = await userModel.findOne({ email: user }).lean();
+  const { email, password } = req.body;
+  const user = await userModel.findOne({ email }).lean();
 
   try {
-    if (!username && !email) {
+    if (!user) {
       return res.status(403).json({ message: "Account doest exist!" });
     }
-    if (username) {
-      if (await bcrypt.compare(password, username.password)) {
+    if (user) {
+      if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign(
-          { id: username._id, username: username.username },
-          process.env.ACCESS_TOKEN_SECRET as string,
-          { expiresIn: "1d" }
-        );
-        console.log(token);
-        return res
-          .status(200)
-          .json({ uid: username._id, username: username.username, token });
-      }
-      return res.status(403).json({ message: "Invalid Password!" });
-    }
-    if (email) {
-      if (await bcrypt.compare(password, email.password)) {
-        console.log(email);
-        const token = jwt.sign(
-          { id: email._id, username: email.username },
+          { id: user._id, fullname: user.fullname },
           process.env.ACCESS_TOKEN_SECRET as string,
           { expiresIn: "1d" }
         );
         return res
           .status(200)
-          .json({ uid: email._id, username: email.username, token });
+          .json({ uid: user._id, fullname: user.fullname, token });
       }
       return res.status(403).json({ message: "Invalid Password!" });
     }
@@ -91,8 +72,13 @@ export const getId = async (req: Request, res: Response) => {
   const { id: _id } = req.params;
 
   try {
-    const user = userModel.findById(_id);
-    return res.status(200).json({ message: "User found", data: user });
+    const user = await userModel.findById({ _id });
+    console.log(user);
+    if (user) {
+      return res.status(200).json({ message: "User found", data: user });
+    } else {
+      return res.status(404).json({ message: "User not found" });
+    }
   } catch (error) {
     return res.status(500).json({ error });
   }
