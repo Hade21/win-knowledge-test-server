@@ -5,10 +5,24 @@ import mongoose from "mongoose";
 export const getProduct = async (req: Request, res: Response) => {
   try {
     const product = await Product.find();
-    return res.status(200).json(product);
+    return res.status(200).json({ message: "success", data: product });
   } catch (error) {
     if (error instanceof Error)
       return res.status(404).json({ message: error.message });
+  }
+};
+
+export const getProductByID = async (req: Request, res: Response) => {
+  const { id: _id } = req.params;
+  try {
+    const product = await Product.findById({ _id });
+    if (product) {
+      return res.status(200).json({ message: "success", data: product });
+    } else {
+      return res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error });
   }
 };
 

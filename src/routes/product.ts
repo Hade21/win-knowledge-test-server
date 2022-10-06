@@ -4,6 +4,7 @@ import {
   createProduct,
   deleteProduct,
   getProduct,
+  getProductByID,
   updateProduct,
 } from "../controllers/product";
 
@@ -13,5 +14,6 @@ router.get("/", getProduct);
 router.post("/", authorizeAccount, createProduct);
 router.patch("/:id", authorizeAccount, updateProduct);
 router.delete("/:id", authorizeAccount, deleteProduct);
+router.get("/:id", authorizeAccount, getProductByID);
 
 export default router;

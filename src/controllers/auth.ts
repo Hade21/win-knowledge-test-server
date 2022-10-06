@@ -73,7 +73,6 @@ export const getId = async (req: Request, res: Response) => {
 
   try {
     const user = await userModel.findById({ _id });
-    console.log(user);
     if (user) {
       return res.status(200).json({ message: "User found", data: user });
     } else {
