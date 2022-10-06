@@ -1,0 +1,19 @@
+FROM node:16
+
+# working directory
+WORKDIR /usr/src/app
+
+# copy package.json and package-lock.json
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY ./src ./src
+
+# install dependencies
+RUN ls -a
+RUN npm install
+
+# expose port
+EXPOSE 8080
+
+# start
+CMD [ "npm", "run", "dev" ]
