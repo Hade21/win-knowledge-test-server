@@ -17,4 +17,4 @@ Jalankan aplikasi
     npm run dev
 
 ##documentation
-https://identity.getpostman.com/handover/multifactor?user=21876767&handover_token=0c0609ba-7bdb-4635-b3c8-e82cb1982d1f
+https://documenter.getpostman.com/view/21876767/2s83zfRRJw
