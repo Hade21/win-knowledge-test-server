@@ -51,10 +51,10 @@ export const updateProduct = async (
 ) => {
   const { id: _id } = req.params;
   const product = req.body;
-
+  const updateProduct = await Product.findById({ _id });
   try {
-    if (!mongoose.Types.ObjectId.isValid(_id))
-      return res.status(404).json({ message: "No post found with id" });
+    if (!updateProduct)
+      return res.status(404).json({ message: "No product found with id" });
 
     const updatedProduct = await Product.findByIdAndUpdate(
       _id,

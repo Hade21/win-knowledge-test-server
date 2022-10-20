@@ -20,11 +20,11 @@ export const signup = async (req: Request, res: Response) => {
     profilePicture,
     gender,
   });
-
+  const exist = await userModel.findOne({ email });
   try {
-    const exist = await userModel.findOne({ email });
     if (!exist) {
       const savedUser = await newUser.save();
+      console.log(exist);
       const user = {
         email: savedUser.email,
         password: savedUser.password,
@@ -34,6 +34,7 @@ export const signup = async (req: Request, res: Response) => {
       return res.status(422).json({ message: "Email has been taken!" });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error });
   }
 };
