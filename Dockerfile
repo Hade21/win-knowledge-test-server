@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:alpine
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ RUN ls -a
 RUN npm install
 RUN npm run build
 
-FROM node:16
+FROM node:alpine
 
 WORKDIR /usr/src/app
 
