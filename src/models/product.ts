@@ -5,7 +5,10 @@ const productSchema = new mongoose.Schema(
     title: String,
     desc: String,
     price: Number,
-    creator: String,
+    creator: {
+      uid: String,
+      name: String,
+    },
     thumbnail: String,
   },
   { timestamps: true }

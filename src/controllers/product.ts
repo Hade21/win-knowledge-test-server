@@ -38,7 +38,6 @@ export const createProduct = async (
     return res.status(201).json(newProduct);
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error.message);
       return res.status(409).json({ message: error.message });
     }
   }
@@ -85,5 +84,19 @@ export const deleteProduct = async (
   } catch (error) {
     if (error instanceof Error)
       return res.status(404).json({ message: error.message });
+  }
+};
+
+export const getMyProduct = async (req: Request, res: Response) => {
+  const { id: _id } = req.params;
+  try {
+    const product = await Product.find({ creator: { uid: _id } });
+    if (product) {
+      return res.status(200).json({ message: "success", data: product });
+    } else {
+      return res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error });
   }
 };
