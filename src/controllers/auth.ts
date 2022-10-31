@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 import userModel from "../models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-require("dotenv").config();
 
 export const signup = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -46,7 +45,6 @@ export const signin = async (req: Request, res: Response) => {
   }
   const { email, password } = req.body;
   const user = await userModel.findOne({ email }).lean();
-  console.log(user);
 
   try {
     if (!user) {
