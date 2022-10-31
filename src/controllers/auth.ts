@@ -48,16 +48,19 @@ export const signin = async (req: Request, res: Response) => {
 
   try {
     if (!user) {
+      console.log("no user");
       return res.status(403).json({ message: "Account doest exist!" });
     }
+    console.log(process.env.ACCESS_TOKEN_SECRET as string);
     if (user) {
+      console.log("ada user");
       if (await bcrypt.compare(password, user.password)) {
         const token = jwt.sign(
           { id: user._id, fullname: user.fullname },
           process.env.ACCESS_TOKEN_SECRET as string,
           { expiresIn: "1d" }
         );
-        console.log(token, process.env.ACCESS_TOKEN_SECRET as string);
+        console.log(token);
         return res
           .status(200)
           .json({ uid: user._id, fullname: user.fullname, token });

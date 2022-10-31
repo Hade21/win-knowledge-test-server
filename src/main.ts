@@ -18,7 +18,6 @@ app.use("/user", authRouter);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI: string = process.env.MONGO_URI as string;
-
 mongoose
   .connect(MONGO_URI)
   .then(() => {
