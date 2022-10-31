@@ -1,0 +1,2 @@
+[environments.production.deploy]
+startCommand = "docker build -t pasar-online:v1 ./ && docker run -d -p 80:80 --name pasar-online --env-file .env pasar-online:v1"
