@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import userModel from "../models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+require("dotenv-vault-core").config();
 
 export const signup = async (req: Request, res: Response) => {
   const errors = validationResult(req);
