@@ -57,6 +57,7 @@ export const signin = async (req: Request, res: Response) => {
           process.env.ACCESS_TOKEN_SECRET as string,
           { expiresIn: "1d" }
         );
+        console.log(token, process.env.ACCESS_TOKEN_SECRET as string);
         return res
           .status(200)
           .json({ uid: user._id, fullname: user.fullname, token });
