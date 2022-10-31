@@ -45,22 +45,22 @@ export const signin = async (req: Request, res: Response) => {
   }
   const { email, password } = req.body;
   const user = await userModel.findOne({ email }).lean();
+  const ACCESS_TOKEN: string = process.env.ACCESS_TOKEN_SECRET as string;
 
   try {
     if (!user) {
-      console.log("no user");
       return res.status(403).json({ message: "Account doest exist!" });
     }
-    console.log(process.env.ACCESS_TOKEN_SECRET as string);
     if (user) {
       console.log("ada user");
       if (await bcrypt.compare(password, user.password)) {
-        console.log("access token", process.env.ACCESS_TOKEN_SECRET);
+        console.log("access token", process.env.ACCESS_TOKEN_SECRET as string);
         const token = jwt.sign(
           { id: user._id, fullname: user.fullname },
-          process.env.ACCESS_TOKEN_SECRET as string,
+          ACCESS_TOKEN,
           { expiresIn: "1d" }
         );
+        console.log(ACCESS_TOKEN);
         return res
           .status(200)
           .json({ uid: user._id, fullname: user.fullname, token });
